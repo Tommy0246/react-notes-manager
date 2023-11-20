@@ -16,11 +16,21 @@ const VALIDATOR = {
     },
 };
 
-export function NoteForm({ title, onClickEdit, onClickTrash, onSubmit }) {
-    const [formValues, setFormValues] = useState({ title: "", content: "" });
+export function NoteForm({
+    isEditable = true,
+    title,
+    onClickEdit,
+    onClickTrash,
+    onSubmit,
+    note,
+}) {
+    const [formValues, setFormValues] = useState({
+        title: note?.title || "",
+        content: note?.content || "",
+    });
     const [formErrors, setFormErrors] = useState({
-        title: "",
-        content: "",
+        title: note?.title ? undefined : "",
+        content: note?.content ? undefined : "",
     });
 
     function hasError() {
@@ -61,6 +71,7 @@ export function NoteForm({ title, onClickEdit, onClickTrash, onSubmit }) {
                 type="text"
                 name="title"
                 className="form-control"
+                value={formValues.title}
             />
             <FieldError msg={formErrors.title} />
         </div>
@@ -68,13 +79,14 @@ export function NoteForm({ title, onClickEdit, onClickTrash, onSubmit }) {
 
     const contentInput = (
         <div className="mb-5">
-            <label className="form-label">Title</label>
+            <label className="form-label">Content</label>
             <textarea
                 onChange={updateFormValues}
                 type="text"
                 name="content"
                 className="form-control"
                 row="5"
+                value={formValues.content}
             />
             <FieldError msg={formErrors.content} />
         </div>
@@ -102,9 +114,11 @@ export function NoteForm({ title, onClickEdit, onClickTrash, onSubmit }) {
                 {onClickEdit ? actionIcons : ""}
             </div>
             <div className={`mb-3 ${s.title_input_container}`}>
-                {titleInput}
+                {isEditable && titleInput}
             </div>
-            <div className="mb-3">{contentInput}</div>
+            <div className="mb-3">
+                {isEditable ? contentInput : <pre>{note.content}</pre>}
+            </div>
             {onSubmit && submitInput}
         </form>
     );

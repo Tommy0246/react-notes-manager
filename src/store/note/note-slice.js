@@ -12,6 +12,12 @@ export const noteSlice = createSlice({
         addNote: (currentSlice, action) => {
             currentSlice.noteList.push(action.payload);
         },
+        updateNote: (currentSlice, action) => {
+            const indexToUpdate = currentSlice.noteList.findIndex(
+                (note) => note.id === action.payload.id
+            );
+            currentSlice.noteList[indexToUpdate] = action.payload;
+        },
         deleteNote: (currentSlice, action) => {
             const filteredList = currentSlice.noteList.filter(
                 (note) => note.id !== action.payload
@@ -23,4 +29,5 @@ export const noteSlice = createSlice({
 
 export const noteReducer = noteSlice.reducer;
 
-export const { setNoteList, addNote, deleteNote } = noteSlice.actions;
+export const { setNoteList, addNote, deleteNote, updateNote } =
+    noteSlice.actions;
